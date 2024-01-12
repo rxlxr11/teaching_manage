@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.course.mapper.RxCourseTimeMapper">
+    
+    <resultMap type="RxCourseTime" id="RxCourseTimeResult">
+        <result property="id"    column="id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="acaYear"    column="aca_year"    />
+        <result property="startWeek"    column="start_week"    />
+        <result property="endWeek"    column="end_week"    />
+        <result property="special"    column="special"    />
+        <result property="weekday"    column="weekday"    />
+        <result property="start"    column="start"    />
+        <result property="end"    column="end"    />
+    </resultMap>
+
+    <sql id="selectRxCourseTimeVo">
+        select id, course_id, aca_year, start_week, end_week, special, weekday, start, end from rx_course_time
+    </sql>
+
+    <select id="selectRxCourseTimeList" parameterType="RxCourseTime" resultMap="RxCourseTimeResult">
+        <include refid="selectRxCourseTimeVo"/>
+        <where>  
+            <if test="courseId != null  and courseId != ''"> and course_id = #{courseId}</if>
+            <if test="acaYear != null "> and aca_year = #{acaYear}</if>
+            <if test="startWeek != null "> and start_week = #{startWeek}</if>
+            <if test="endWeek != null "> and end_week = #{endWeek}</if>
+            <if test="special != null "> and special = #{special}</if>
+            <if test="weekday != null "> and weekday = #{weekday}</if>
+            <if test="start != null "> and start = #{start}</if>
+            <if test="end != null "> and end = #{end}</if>
+        </where>
+    </select>
+    
+    <select id="selectRxCourseTimeById" parameterType="String" resultMap="RxCourseTimeResult">
+        <include refid="selectRxCourseTimeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertRxCourseTime" parameterType="RxCourseTime">
+        insert into rx_course_time
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="courseId != null and courseId != ''">course_id,</if>
+            <if test="acaYear != null">aca_year,</if>
+            <if test="startWeek != null">start_week,</if>
+            <if test="endWeek != null">end_week,</if>
+            <if test="special != null">special,</if>
+            <if test="weekday != null">weekday,</if>
+            <if test="start != null">start,</if>
+            <if test="end != null">end,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="courseId != null and courseId != ''">#{courseId},</if>
+            <if test="acaYear != null">#{acaYear},</if>
+            <if test="startWeek != null">#{startWeek},</if>
+            <if test="endWeek != null">#{endWeek},</if>
+            <if test="special != null">#{special},</if>
+            <if test="weekday != null">#{weekday},</if>
+            <if test="start != null">#{start},</if>
+            <if test="end != null">#{end},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRxCourseTime" parameterType="RxCourseTime">
+        update rx_course_time
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseId != null and courseId != ''">course_id = #{courseId},</if>
+            <if test="acaYear != null">aca_year = #{acaYear},</if>
+            <if test="startWeek != null">start_week = #{startWeek},</if>
+            <if test="endWeek != null">end_week = #{endWeek},</if>
+            <if test="special != null">special = #{special},</if>
+            <if test="weekday != null">weekday = #{weekday},</if>
+            <if test="start != null">start = #{start},</if>
+            <if test="end != null">end = #{end},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRxCourseTimeById" parameterType="String">
+        delete from rx_course_time where id = #{id}
+    </delete>
+
+    <delete id="deleteRxCourseTimeByIds" parameterType="String">
+        delete from rx_course_time where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.manage.mapper.RxTeacherMapper">
+    
+    <resultMap type="RxTeacher" id="RxTeacherResult">
+        <result property="id"    column="id"    />
+        <result property="teacherId"    column="teacher_id"    />
+        <result property="name"    column="name"    />
+        <result property="age"    column="age"    />
+        <result property="gender"    column="gender"    />
+        <result property="born"    column="born"    />
+        <result property="salary"    column="salary"    />
+        <result property="collegeId"    column="college_id"    />
+        <result property="position"    column="position"    />
+    </resultMap>
+
+    <sql id="selectRxTeacherVo">
+        select id, teacher_id, name, age, gender, born, salary, college_id, position from rx_teacher
+    </sql>
+
+    <select id="selectRxTeacherList" parameterType="RxTeacher" resultMap="RxTeacherResult">
+        <include refid="selectRxTeacherVo"/>
+        <where>  
+            <if test="teacherId != null  and teacherId != ''"> and teacher_id = #{teacherId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="age != null "> and age = #{age}</if>
+            <if test="gender != null "> and gender = #{gender}</if>
+            <if test="born != null  and born != ''"> and born = #{born}</if>
+            <if test="salary != null "> and salary = #{salary}</if>
+            <if test="collegeId != null  and collegeId != ''"> and college_id = #{collegeId}</if>
+            <if test="position != null  and position != ''"> and position = #{position}</if>
+        </where>
+    </select>
+    
+    <select id="selectRxTeacherById" parameterType="Long" resultMap="RxTeacherResult">
+        <include refid="selectRxTeacherVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertRxTeacher" parameterType="RxTeacher">
+        insert into rx_teacher
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="teacherId != null and teacherId != ''">teacher_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="age != null">age,</if>
+            <if test="gender != null">gender,</if>
+            <if test="born != null">born,</if>
+            <if test="salary != null">salary,</if>
+            <if test="collegeId != null">college_id,</if>
+            <if test="position != null">position,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="teacherId != null and teacherId != ''">#{teacherId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="age != null">#{age},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="born != null">#{born},</if>
+            <if test="salary != null">#{salary},</if>
+            <if test="collegeId != null">#{collegeId},</if>
+            <if test="position != null">#{position},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRxTeacher" parameterType="RxTeacher">
+        update rx_teacher
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="teacherId != null and teacherId != ''">teacher_id = #{teacherId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="born != null">born = #{born},</if>
+            <if test="salary != null">salary = #{salary},</if>
+            <if test="collegeId != null">college_id = #{collegeId},</if>
+            <if test="position != null">position = #{position},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRxTeacherById" parameterType="Long">
+        delete from rx_teacher where id = #{id}
+    </delete>
+
+    <delete id="deleteRxTeacherByIds" parameterType="String">
+        delete from rx_teacher where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

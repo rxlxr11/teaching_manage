@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.course.mapper.RxSelectCourseMapper">
+    
+    <resultMap type="RxSelectCourse" id="RxSelectCourseResult">
+        <result property="id"    column="id"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="grade1"    column="grade_1"    />
+        <result property="grade2"    column="grade_2"    />
+        <result property="grade3"    column="grade_3"    />
+        <result property="state"    column="state"    />
+        <result property="gpa"    column="gpa"    />
+    </resultMap>
+
+    <sql id="selectRxSelectCourseVo">
+        select id, stu_id, course_id, grade_1, grade_2, grade_3, state, gpa from rx_select_course
+    </sql>
+
+    <select id="selectRxSelectCourseList" parameterType="RxSelectCourse" resultMap="RxSelectCourseResult">
+        <include refid="selectRxSelectCourseVo"/>
+        <where>  
+            <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
+            <if test="courseId != null  and courseId != ''"> and course_id = #{courseId}</if>
+            <if test="grade1 != null "> and grade_1 = #{grade1}</if>
+            <if test="grade2 != null "> and grade_2 = #{grade2}</if>
+            <if test="grade3 != null "> and grade_3 = #{grade3}</if>
+            <if test="state != null "> and state = #{state}</if>
+            <if test="gpa != null "> and gpa = #{gpa}</if>
+        </where>
+    </select>
+    
+    <select id="selectRxSelectCourseById" parameterType="String" resultMap="RxSelectCourseResult">
+        <include refid="selectRxSelectCourseVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertRxSelectCourse" parameterType="RxSelectCourse" useGeneratedKeys="true" keyProperty="id">
+        insert into rx_select_course
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null and stuId != ''">stu_id,</if>
+            <if test="courseId != null and courseId != ''">course_id,</if>
+            <if test="grade1 != null">grade_1,</if>
+            <if test="grade2 != null">grade_2,</if>
+            <if test="grade3 != null">grade_3,</if>
+            <if test="state != null">state,</if>
+            <if test="gpa != null">gpa,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null and stuId != ''">#{stuId},</if>
+            <if test="courseId != null and courseId != ''">#{courseId},</if>
+            <if test="grade1 != null">#{grade1},</if>
+            <if test="grade2 != null">#{grade2},</if>
+            <if test="grade3 != null">#{grade3},</if>
+            <if test="state != null">#{state},</if>
+            <if test="gpa != null">#{gpa},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRxSelectCourse" parameterType="RxSelectCourse">
+        update rx_select_course
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuId != null and stuId != ''">stu_id = #{stuId},</if>
+            <if test="courseId != null and courseId != ''">course_id = #{courseId},</if>
+            <if test="grade1 != null">grade_1 = #{grade1},</if>
+            <if test="grade2 != null">grade_2 = #{grade2},</if>
+            <if test="grade3 != null">grade_3 = #{grade3},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="gpa != null">gpa = #{gpa},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRxSelectCourseById" parameterType="String">
+        delete from rx_select_course where id = #{id}
+    </delete>
+
+    <delete id="deleteRxSelectCourseByIds" parameterType="String">
+        delete from rx_select_course where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

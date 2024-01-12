@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.manage.mapper.RxAcayearMapper">
+    
+    <resultMap type="RxAcayear" id="RxAcayearResult">
+        <result property="yearId"    column="year_id"    />
+        <result property="name"    column="name"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+    </resultMap>
+
+    <sql id="selectRxAcayearVo">
+        select year_id, name, start_time, end_time from rx_acayear
+    </sql>
+
+    <select id="selectRxAcayearList" parameterType="RxAcayear" resultMap="RxAcayearResult">
+        <include refid="selectRxAcayearVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectRxAcayearByYearId" parameterType="Long" resultMap="RxAcayearResult">
+        <include refid="selectRxAcayearVo"/>
+        where year_id = #{yearId}
+    </select>
+        
+    <insert id="insertRxAcayear" parameterType="RxAcayear">
+        insert into rx_acayear
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="yearId != null">year_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="yearId != null">#{yearId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRxAcayear" parameterType="RxAcayear">
+        update rx_acayear
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+        </trim>
+        where year_id = #{yearId}
+    </update>
+
+    <delete id="deleteRxAcayearByYearId" parameterType="Long">
+        delete from rx_acayear where year_id = #{yearId}
+    </delete>
+
+    <delete id="deleteRxAcayearByYearIds" parameterType="String">
+        delete from rx_acayear where year_id in 
+        <foreach item="yearId" collection="array" open="(" separator="," close=")">
+            #{yearId}
+        </foreach>
+    </delete>
+</mapper>

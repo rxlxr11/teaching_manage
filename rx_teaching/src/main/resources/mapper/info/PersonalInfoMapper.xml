@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.info.mapper.PersonalInfoMapper">
+    
+    <resultMap type="PersonalInfo" id="PersonalInfoResult">
+        <result property="stuId"    column="stu_id"    />
+        <result property="name"    column="name"    />
+        <result property="age"    column="age"    />
+        <result property="gender"    column="gender"    />
+        <result property="born"    column="born"    />
+        <result property="role"    column="role"    />
+    </resultMap>
+
+    <sql id="selectPersonalInfoVo">
+        select stu_id, name, age, gender, born, role from personal_info
+    </sql>
+
+    <select id="selectPersonalInfoList" parameterType="PersonalInfo" resultMap="PersonalInfoResult">
+        <include refid="selectPersonalInfoVo"/>
+        <where>  
+            <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="age != null "> and age = #{age}</if>
+            <if test="gender != null "> and gender = #{gender}</if>
+            <if test="born != null  and born != ''"> and born = #{born}</if>
+            <if test="role != null  and role != ''"> and role = #{role}</if>
+        </where>
+    </select>
+    
+    <select id="selectPersonalInfoByStuId" parameterType="String" resultMap="PersonalInfoResult">
+        <include refid="selectPersonalInfoVo"/>
+        where stu_id = #{stuId}
+    </select>
+        
+    <insert id="insertPersonalInfo" parameterType="PersonalInfo">
+        insert into personal_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null and stuId != ''">stu_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="age != null">age,</if>
+            <if test="gender != null">gender,</if>
+            <if test="born != null">born,</if>
+            <if test="role != null and role != ''">role,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null and stuId != ''">#{stuId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="age != null">#{age},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="born != null">#{born},</if>
+            <if test="role != null and role != ''">#{role},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePersonalInfo" parameterType="PersonalInfo">
+        update personal_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="born != null">born = #{born},</if>
+            <if test="role != null and role != ''">role = #{role},</if>
+        </trim>
+        where stu_id = #{stuId}
+    </update>
+
+    <delete id="deletePersonalInfoByStuId" parameterType="String">
+        delete from personal_info where stu_id = #{stuId}
+    </delete>
+
+    <delete id="deletePersonalInfoByStuIds" parameterType="String">
+        delete from personal_info where stu_id in 
+        <foreach item="stuId" collection="array" open="(" separator="," close=")">
+            #{stuId}
+        </foreach>
+    </delete>
+</mapper>

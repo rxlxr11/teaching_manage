@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.info.mapper.TimetableMapper">
+    
+    <resultMap type="Timetable" id="TimetableResult">
+        <result property="stuId"    column="stu_id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="acaYear"    column="aca_year"    />
+        <result property="startWeek"    column="start_week"    />
+        <result property="endWeek"    column="end_week"    />
+        <result property="start"    column="start"    />
+        <result property="end"    column="end"    />
+        <result property="weekday"    column="weekday"    />
+        <result property="special"    column="special"    />
+    </resultMap>
+
+    <sql id="selectTimetableVo">
+        select stu_id, stu_name, course_id, course_name, aca_year, start_week, end_week, start, end, weekday, special from timetable
+    </sql>
+
+    <select id="selectTimetableList" parameterType="Timetable" resultMap="TimetableResult">
+        <include refid="selectTimetableVo"/>
+        <where>  
+            <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
+            <if test="stuName != null  and stuName != ''"> and stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="courseId != null  and courseId != ''"> and course_id = #{courseId}</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="acaYear != null "> and aca_year = #{acaYear}</if>
+            <if test="startWeek != null "> and start_week = #{startWeek}</if>
+            <if test="endWeek != null "> and end_week = #{endWeek}</if>
+            <if test="start != null "> and start = #{start}</if>
+            <if test="end != null "> and end = #{end}</if>
+            <if test="weekday != null "> and weekday = #{weekday}</if>
+            <if test="special != null "> and special = #{special}</if>
+        </where>
+    </select>
+    
+    <select id="selectTimetableByStuId" parameterType="String" resultMap="TimetableResult">
+        <include refid="selectTimetableVo"/>
+        where stu_id = #{stuId}
+    </select>
+        
+    <insert id="insertTimetable" parameterType="Timetable">
+        insert into timetable
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null and stuId != ''">stu_id,</if>
+            <if test="stuName != null and stuName != ''">stu_name,</if>
+            <if test="courseId != null and courseId != ''">course_id,</if>
+            <if test="courseName != null">course_name,</if>
+            <if test="acaYear != null">aca_year,</if>
+            <if test="startWeek != null">start_week,</if>
+            <if test="endWeek != null">end_week,</if>
+            <if test="start != null">start,</if>
+            <if test="end != null">end,</if>
+            <if test="weekday != null">weekday,</if>
+            <if test="special != null">special,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null and stuId != ''">#{stuId},</if>
+            <if test="stuName != null and stuName != ''">#{stuName},</if>
+            <if test="courseId != null and courseId != ''">#{courseId},</if>
+            <if test="courseName != null">#{courseName},</if>
+            <if test="acaYear != null">#{acaYear},</if>
+            <if test="startWeek != null">#{startWeek},</if>
+            <if test="endWeek != null">#{endWeek},</if>
+            <if test="start != null">#{start},</if>
+            <if test="end != null">#{end},</if>
+            <if test="weekday != null">#{weekday},</if>
+            <if test="special != null">#{special},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTimetable" parameterType="Timetable">
+        update timetable
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuName != null and stuName != ''">stu_name = #{stuName},</if>
+            <if test="courseId != null and courseId != ''">course_id = #{courseId},</if>
+            <if test="courseName != null">course_name = #{courseName},</if>
+            <if test="acaYear != null">aca_year = #{acaYear},</if>
+            <if test="startWeek != null">start_week = #{startWeek},</if>
+            <if test="endWeek != null">end_week = #{endWeek},</if>
+            <if test="start != null">start = #{start},</if>
+            <if test="end != null">end = #{end},</if>
+            <if test="weekday != null">weekday = #{weekday},</if>
+            <if test="special != null">special = #{special},</if>
+        </trim>
+        where stu_id = #{stuId}
+    </update>
+
+    <delete id="deleteTimetableByStuId" parameterType="String">
+        delete from timetable where stu_id = #{stuId}
+    </delete>
+
+    <delete id="deleteTimetableByStuIds" parameterType="String">
+        delete from timetable where stu_id in 
+        <foreach item="stuId" collection="array" open="(" separator="," close=")">
+            #{stuId}
+        </foreach>
+    </delete>
+</mapper>

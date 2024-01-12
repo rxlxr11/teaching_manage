@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.manage.mapper.RxMajorCreditMapper">
+    
+    <resultMap type="RxMajorCredit" id="RxMajorCreditResult">
+        <result property="id"    column="id"    />
+        <result property="majorId"    column="major_id"    />
+        <result property="compulsoryGeneraleduCredit"    column="compulsory_generaledu_credit"    />
+        <result property="compulsoryMajorbasicCredit"    column="compulsory_majorbasic_credit"    />
+        <result property="compulsoryMajordirectCredit"    column="compulsory_majordirect_credit"    />
+        <result property="compulsoryPracticeCredit"    column="compulsory_practice_credit"    />
+        <result property="electiveGeneraleduCredit"    column="elective_generaledu_credit"    />
+        <result property="electiveMajorbasicCredit"    column="elective_majorbasic_credit"    />
+        <result property="electiveMajordirectCredit"    column="elective_majordirect_credit"    />
+        <result property="electivePracticeCredit"    column="elective_practice_credit"    />
+        <result property="electiveSchoolCredit"    column="elective_school_credit"    />
+        <result property="independentStudyCredit"    column="independent_study_credit"    />
+    </resultMap>
+
+    <sql id="selectRxMajorCreditVo">
+        select id, major_id, compulsory_generaledu_credit, compulsory_majorbasic_credit, compulsory_majordirect_credit, compulsory_practice_credit, elective_generaledu_credit, elective_majorbasic_credit, elective_majordirect_credit, elective_practice_credit, elective_school_credit, independent_study_credit from rx_major_credit
+    </sql>
+
+    <select id="selectRxMajorCreditList" parameterType="RxMajorCredit" resultMap="RxMajorCreditResult">
+        <include refid="selectRxMajorCreditVo"/>
+        <where>  
+            <if test="majorId != null  and majorId != ''"> and major_id = #{majorId}</if>
+        </where>
+    </select>
+    
+    <select id="selectRxMajorCreditById" parameterType="Long" resultMap="RxMajorCreditResult">
+        <include refid="selectRxMajorCreditVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertRxMajorCredit" parameterType="RxMajorCredit" useGeneratedKeys="true" keyProperty="id">
+        insert into rx_major_credit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="majorId != null">major_id,</if>
+            <if test="compulsoryGeneraleduCredit != null">compulsory_generaledu_credit,</if>
+            <if test="compulsoryMajorbasicCredit != null">compulsory_majorbasic_credit,</if>
+            <if test="compulsoryMajordirectCredit != null">compulsory_majordirect_credit,</if>
+            <if test="compulsoryPracticeCredit != null">compulsory_practice_credit,</if>
+            <if test="electiveGeneraleduCredit != null">elective_generaledu_credit,</if>
+            <if test="electiveMajorbasicCredit != null">elective_majorbasic_credit,</if>
+            <if test="electiveMajordirectCredit != null">elective_majordirect_credit,</if>
+            <if test="electivePracticeCredit != null">elective_practice_credit,</if>
+            <if test="electiveSchoolCredit != null">elective_school_credit,</if>
+            <if test="independentStudyCredit != null">independent_study_credit,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="majorId != null">#{majorId},</if>
+            <if test="compulsoryGeneraleduCredit != null">#{compulsoryGeneraleduCredit},</if>
+            <if test="compulsoryMajorbasicCredit != null">#{compulsoryMajorbasicCredit},</if>
+            <if test="compulsoryMajordirectCredit != null">#{compulsoryMajordirectCredit},</if>
+            <if test="compulsoryPracticeCredit != null">#{compulsoryPracticeCredit},</if>
+            <if test="electiveGeneraleduCredit != null">#{electiveGeneraleduCredit},</if>
+            <if test="electiveMajorbasicCredit != null">#{electiveMajorbasicCredit},</if>
+            <if test="electiveMajordirectCredit != null">#{electiveMajordirectCredit},</if>
+            <if test="electivePracticeCredit != null">#{electivePracticeCredit},</if>
+            <if test="electiveSchoolCredit != null">#{electiveSchoolCredit},</if>
+            <if test="independentStudyCredit != null">#{independentStudyCredit},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRxMajorCredit" parameterType="RxMajorCredit">
+        update rx_major_credit
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="majorId != null">major_id = #{majorId},</if>
+            <if test="compulsoryGeneraleduCredit != null">compulsory_generaledu_credit = #{compulsoryGeneraleduCredit},</if>
+            <if test="compulsoryMajorbasicCredit != null">compulsory_majorbasic_credit = #{compulsoryMajorbasicCredit},</if>
+            <if test="compulsoryMajordirectCredit != null">compulsory_majordirect_credit = #{compulsoryMajordirectCredit},</if>
+            <if test="compulsoryPracticeCredit != null">compulsory_practice_credit = #{compulsoryPracticeCredit},</if>
+            <if test="electiveGeneraleduCredit != null">elective_generaledu_credit = #{electiveGeneraleduCredit},</if>
+            <if test="electiveMajorbasicCredit != null">elective_majorbasic_credit = #{electiveMajorbasicCredit},</if>
+            <if test="electiveMajordirectCredit != null">elective_majordirect_credit = #{electiveMajordirectCredit},</if>
+            <if test="electivePracticeCredit != null">elective_practice_credit = #{electivePracticeCredit},</if>
+            <if test="electiveSchoolCredit != null">elective_school_credit = #{electiveSchoolCredit},</if>
+            <if test="independentStudyCredit != null">independent_study_credit = #{independentStudyCredit},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRxMajorCreditById" parameterType="Long">
+        delete from rx_major_credit where id = #{id}
+    </delete>
+
+    <delete id="deleteRxMajorCreditByIds" parameterType="String">
+        delete from rx_major_credit where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.manage.mapper.RxStudentMapper">
+    
+    <resultMap type="RxStudent" id="RxStudentResult">
+        <result property="id"    column="id"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="name"    column="name"    />
+        <result property="age"    column="age"    />
+        <result property="gender"    column="gender"    />
+        <result property="born"    column="born"    />
+        <result property="classname"    column="classname"    />
+        <result property="gpa"    column="gpa"    />
+    </resultMap>
+
+    <sql id="selectRxStudentVo">
+        select id, stu_id, name, age, gender, born, classname, gpa from rx_student
+    </sql>
+
+    <select id="selectRxStudentList" parameterType="RxStudent" resultMap="RxStudentResult">
+        <include refid="selectRxStudentVo"/>
+        <where>  
+            <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="age != null "> and age = #{age}</if>
+            <if test="gender != null "> and gender = #{gender}</if>
+            <if test="born != null  and born != ''"> and born = #{born}</if>
+            <if test="classname != null  and classname != ''"> and classname like concat('%', #{classname}, '%')</if>
+            <if test="gpa != null "> and gpa = #{gpa}</if>
+        </where>
+    </select>
+    
+    <select id="selectRxStudentById" parameterType="Long" resultMap="RxStudentResult">
+        <include refid="selectRxStudentVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertRxStudent" parameterType="RxStudent" useGeneratedKeys="true" keyProperty="id">
+        insert into rx_student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null and stuId != ''">stu_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="age != null">age,</if>
+            <if test="gender != null">gender,</if>
+            <if test="born != null">born,</if>
+            <if test="classname != null">classname,</if>
+            <if test="gpa != null">gpa,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null and stuId != ''">#{stuId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="age != null">#{age},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="born != null">#{born},</if>
+            <if test="classname != null">#{classname},</if>
+            <if test="gpa != null">#{gpa},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRxStudent" parameterType="RxStudent">
+        update rx_student
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuId != null and stuId != ''">stu_id = #{stuId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="born != null">born = #{born},</if>
+            <if test="classname != null">classname = #{classname},</if>
+            <if test="gpa != null">gpa = #{gpa},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRxStudentById" parameterType="Long">
+        delete from rx_student where id = #{id}
+    </delete>
+
+    <delete id="deleteRxStudentByIds" parameterType="String">
+        delete from rx_student where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

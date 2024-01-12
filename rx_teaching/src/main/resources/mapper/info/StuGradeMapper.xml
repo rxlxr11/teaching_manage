@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.info.mapper.StuGradeMapper">
+    
+    <resultMap type="StuGrade" id="StuGradeResult">
+        <result property="stuId"    column="stu_id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="type"    column="type"    />
+        <result property="credit"    column="credit"    />
+        <result property="acaYear"    column="aca_year"    />
+        <result property="grade"    column="grade"    />
+        <result property="gpa"    column="gpa"    />
+        <result property="state"    column="state"    />
+    </resultMap>
+
+    <sql id="selectStuGradeVo">
+        select stu_id, stu_name, course_id, course_name, type, credit, aca_year, grade, gpa, state from stu_grade
+    </sql>
+
+    <select id="selectStuGradeList" parameterType="StuGrade" resultMap="StuGradeResult">
+        <include refid="selectStuGradeVo"/>
+        <where>  
+            <if test="stuId != null  and stuId != ''"> and stu_id = #{stuId}</if>
+            <if test="stuName != null  and stuName != ''"> and stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="courseId != null  and courseId != ''"> and course_id = #{courseId}</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="credit != null "> and credit = #{credit}</if>
+            <if test="acaYear != null "> and aca_year = #{acaYear}</if>
+            <if test="grade != null "> and grade = #{grade}</if>
+            <if test="gpa != null "> and gpa = #{gpa}</if>
+            <if test="state != null  and state != ''"> and state = #{state}</if>
+        </where>
+    </select>
+    
+    <select id="selectStuGradeByStuId" parameterType="String" resultMap="StuGradeResult">
+        <include refid="selectStuGradeVo"/>
+        where stu_id = #{stuId}
+    </select>
+        
+    <insert id="insertStuGrade" parameterType="StuGrade">
+        insert into stu_grade
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null and stuId != ''">stu_id,</if>
+            <if test="stuName != null and stuName != ''">stu_name,</if>
+            <if test="courseId != null and courseId != ''">course_id,</if>
+            <if test="courseName != null">course_name,</if>
+            <if test="type != null">type,</if>
+            <if test="credit != null">credit,</if>
+            <if test="acaYear != null">aca_year,</if>
+            <if test="grade != null">grade,</if>
+            <if test="gpa != null">gpa,</if>
+            <if test="state != null">state,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null and stuId != ''">#{stuId},</if>
+            <if test="stuName != null and stuName != ''">#{stuName},</if>
+            <if test="courseId != null and courseId != ''">#{courseId},</if>
+            <if test="courseName != null">#{courseName},</if>
+            <if test="type != null">#{type},</if>
+            <if test="credit != null">#{credit},</if>
+            <if test="acaYear != null">#{acaYear},</if>
+            <if test="grade != null">#{grade},</if>
+            <if test="gpa != null">#{gpa},</if>
+            <if test="state != null">#{state},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStuGrade" parameterType="StuGrade">
+        update stu_grade
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuName != null and stuName != ''">stu_name = #{stuName},</if>
+            <if test="courseId != null and courseId != ''">course_id = #{courseId},</if>
+            <if test="courseName != null">course_name = #{courseName},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="credit != null">credit = #{credit},</if>
+            <if test="acaYear != null">aca_year = #{acaYear},</if>
+            <if test="grade != null">grade = #{grade},</if>
+            <if test="gpa != null">gpa = #{gpa},</if>
+            <if test="state != null">state = #{state},</if>
+        </trim>
+        where stu_id = #{stuId}
+    </update>
+
+    <delete id="deleteStuGradeByStuId" parameterType="String">
+        delete from stu_grade where stu_id = #{stuId}
+    </delete>
+
+    <delete id="deleteStuGradeByStuIds" parameterType="String">
+        delete from stu_grade where stu_id in 
+        <foreach item="stuId" collection="array" open="(" separator="," close=")">
+            #{stuId}
+        </foreach>
+    </delete>
+</mapper>
